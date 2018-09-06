@@ -2,6 +2,6 @@ Upload Test:
 
 [X] Hunt Connected
 [ ] Hugh Connected
+[X] William Connected
 [X] Jordan Connected
-[ ] William Connected
 [ ] Tommy Connected
