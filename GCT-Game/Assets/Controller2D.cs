@@ -7,6 +7,7 @@ public class Controller2D : MonoBehaviour {
     private Rigidbody2D rb;
     private float velMod;
     private float jumpForce;
+    //private RaycastHit2D hit;
 
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -16,7 +17,9 @@ public class Controller2D : MonoBehaviour {
 
     private void Update()
     {
+        //float dist = .51F;
         Vector2 jump = new Vector2(0.0f, jumpForce);
+        //hit = Physics2D.Raycast(rb.transform.position, Vector2.down, dist);
         if (Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(jump);
