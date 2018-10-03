@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Controller2D : MonoBehaviour {
 
-    private Rigidbody2D rb;
-    private float velMod;
-    private float jumpForce;
+    private Rigidbody2D rb; // ridgid body for this object
+    private float velMod; //how fast we scale movement left and right
+    private float jumpForce; //how much of a force we're applying upwards when we jump
     //private RaycastHit2D hit;
 
 	void Start () {
