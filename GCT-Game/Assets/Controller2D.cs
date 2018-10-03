@@ -8,7 +8,6 @@ public class Controller2D : MonoBehaviour {
     private float velMod; //how fast we scale movement left and right
     private float jumpForce; //how much of a force we're applying upwards when we jump
     private Dictionary<int, Vector3> rewindDict = new Dictionary<int, Vector3>();
-    private bool playable = true;
     private int rewindFrame;
     //private RaycastHit2D hit;
 
@@ -20,10 +19,8 @@ public class Controller2D : MonoBehaviour {
 
     private void Update()
     {
-
         if (Input.GetKey("e")) //hold down e to rewind
         {
-
             if (rewindDict.ContainsKey(rewindFrame)) // so we don't go back too far in time
             {
                 print("Rewinding");
@@ -48,6 +45,7 @@ public class Controller2D : MonoBehaviour {
                 rb.AddForce(jump);
             }
 
+            //when we rewind we need a frame to start from
             rewindFrame = Time.frameCount;
         }
     }
