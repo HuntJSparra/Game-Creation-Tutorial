@@ -8,7 +8,7 @@ public class Controller2D : MonoBehaviour {
     private float velMod; //how fast we scale movement left and right
     private float jumpForce; //how much of a force we're applying upwards when we jump
     private Dictionary<int, Vector3> rewindDict = new Dictionary<int, Vector3>();
-    private int rewindFrame;
+    private int rewindFrame; //current frame that you're on
     //private RaycastHit2D hit;
 
 	void Start () {
