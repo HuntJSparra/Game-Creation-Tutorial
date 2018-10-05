@@ -16,7 +16,7 @@ public class Controller2D : MonoBehaviour {
         velMod = 5;
         jumpForce = 300;
 	}
-
+    
     private void Update()
     {
         if (Input.GetKey("e")) //hold down e to rewind
