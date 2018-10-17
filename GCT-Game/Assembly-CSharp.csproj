@@ -61,7 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CloneScript.cs" />
     <Compile Include="Assets\Controller2D.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/billy/Game Creation (Teleportation)/Game-Creation-Tutorial/GCT-Game/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>

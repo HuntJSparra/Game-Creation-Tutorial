@@ -9,8 +9,6 @@ public class Controller2D : MonoBehaviour {
     private float jumpForce; //how much of a force we're applying upwards when we jump
     private Dictionary<int, Vector3> rewindDict = new Dictionary<int, Vector3>();
     private int rewindFrame; //current frame that you're on
-    private bool rewindedLastFrame = false;
-    public GameObject guy;
     //private RaycastHit2D hit;
 
 	void Start () {
@@ -31,16 +29,10 @@ public class Controller2D : MonoBehaviour {
                 Quaternion empty = new Quaternion();
                 transform.SetPositionAndRotation(rewindingPos, empty);
                 rewindFrame = rewindFrame - 1;
-                rewindedLastFrame = true;
             }
         }
         else //playable
         {
-            if(rewindedLastFrame)
-            {
-                GameObject clone = Instantiate(guy);
-                rewindedLastFrame = false;
-            }
             //adds current location to rewinding dictionary
             rewindDict.Add(Time.frameCount, transform.position);
             print(" Adding " + Time.frameCount + " " + transform.position); //prints out where you are going next // Get rid of later
