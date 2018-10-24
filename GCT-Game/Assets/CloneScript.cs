@@ -20,18 +20,23 @@ public class CloneScript : MonoBehaviour {
         currentTime = player.GetComponent<Controller2D>().getTime();
         if (Input.GetKey("e")) //hold down e to rewind
         {
-            if (rewindDict.ContainsKey(currentTime)) // so we don't go back too far in time
+            if (rewindDict.ContainsKey(currentTime)) //setting position if this clone is in the dictionary
             {
                 //print("Rewinding");
                 Vector3 rewindingPos = rewindDict[currentTime];
                 //print("Rewinding to this place " + rewindingPos);
                 Quaternion empty = new Quaternion();
+                GetComponent<SpriteRenderer>().enabled = true;
                 transform.SetPositionAndRotation(rewindingPos, empty);
             }
+            else //while rewinding and this clone is not supposed to be displayed right now
+            {
+                GetComponent<SpriteRenderer>().enabled = false;
+            }
         }
-        else //not rewinding
+        else //going forward
         {
-            if(rewindDict.ContainsKey(currentTime))
+            if(rewindDict.ContainsKey(currentTime)) 
             {
                 GetComponent<SpriteRenderer>().enabled = true;
                 Vector3 rewindingPos = rewindDict[currentTime];
