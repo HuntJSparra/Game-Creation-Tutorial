@@ -8,8 +8,8 @@ public class Controller2D : MonoBehaviour {
     private float velMod; //how fast we scale movement left and right
     private float jumpForce; //how much of a force we're applying upwards when we jump
     private Dictionary<int, Vector3> rewindDict = new Dictionary<int, Vector3>();
-    private int rewindFrame; //current frame that you're on
-    private bool rewindedLastFrame = false;
+    private bool rewindingStartedLastFrame = true;
+    private int currentTime;
     public GameObject guy;
     //private RaycastHit2D hit;
 
@@ -23,26 +23,37 @@ public class Controller2D : MonoBehaviour {
     {
         if (Input.GetKey("e")) //hold down e to rewind
         {
-            if (rewindDict.ContainsKey(rewindFrame)) // so we don't go back too far in time
+            if (rewindDict.ContainsKey(currentTime)) // so we don't go back too far in time
             {
-                print("Rewinding");
-                Vector3 rewindingPos = rewindDict[rewindFrame];
-                print("Rewinding to this place " + rewindingPos);
                 Quaternion empty = new Quaternion();
-                transform.SetPositionAndRotation(rewindingPos, empty);
-                rewindFrame = rewindFrame - 1;
-                rewindedLastFrame = true;
+                if (rewindingStartedLastFrame)
+                {
+                    Vector3 currentPos = transform.position;
+                    GameObject clone = Instantiate(guy,currentPos,empty);
+                    //myObject.GetComponent<MyScript>().MyFunction();
+                    
+                    clone.GetComponent<CloneScript>().updateDictionary(rewindDict);
+                    print("spawning a guy");
+
+                    rewindingStartedLastFrame = false;
+                }
+                //print("Rewinding");
+                //Vector3 rewindingPos = rewindDict[rewindFrame];
+                //print("Rewinding to this place " + rewindingPos);
+                GetComponent<Rigidbody2D>().simulated = false;
+                //transform.SetPositionAndRotation(rewindingPos, empty);
+                currentTime = currentTime - 1;
+                
             }
         }
         else //playable
         {
-            if(rewindedLastFrame)
+            if (GetComponent<Rigidbody2D>().simulated == false)
             {
-                GameObject clone = Instantiate(guy);
-                rewindedLastFrame = false;
+                GetComponent<Rigidbody2D>().simulated = true;
             }
             //adds current location to rewinding dictionary
-            rewindDict.Add(Time.frameCount, transform.position);
+            rewindDict.Add(currentTime, transform.position);
             print(" Adding " + Time.frameCount + " " + transform.position); //prints out where you are going next // Get rid of later
 
             //float dist = .51F;
@@ -53,13 +64,20 @@ public class Controller2D : MonoBehaviour {
                 rb.AddForce(jump);
             }
 
-            //when we rewind we need a frame to start from
-            rewindFrame = Time.frameCount;
+            //The current time 
+            currentTime = currentTime + 1;
+
+            rewindingStartedLastFrame = true;
         }
     }
 
     // Update is called once per frame
     void FixedUpdate () {
         rb.velocity = new Vector2(Input.GetAxis("Horizontal")*velMod, rb.velocity.y);
+    }
+
+    public int getTime()
+    {
+        return currentTime;
     }
 }
