@@ -11,7 +11,8 @@ public class Controller2D : MonoBehaviour {
     private float jumpForce; //how much of a force we're applying upwards when we jump
     private Dictionary<int, Vector3> rewindDict = new Dictionary<int, Vector3>();
     private bool rewindingStartedLastFrame = true;
-    private int currentTime;
+    private int currentTime; // current time that we are on (is subtracted while we're going back in time)
+    private Vector2 momentum; //current velocity of the player 
     public GameObject guy;
     //private RaycastHit2D hit;
 
@@ -48,6 +49,8 @@ public class Controller2D : MonoBehaviour {
             //removing the position 
             rewindDict.Remove(currentTime);
             currentTime = currentTime - 1;
+
+            
         }
         else //playable
         {
@@ -66,6 +69,20 @@ public class Controller2D : MonoBehaviour {
                 rb.AddForce(jump);
             }
 
+            if(rewindingStartedLastFrame == false)
+            {
+                rb.bodyType = RigidbodyType2D.Dynamic;
+                //sets velocity of player character to momentum;
+                print("setting the velocity to momentum");
+                rb.velocity = momentum;
+            }
+
+
+            //gets the velocity of the player character so after they rewind they are still moving in the direction before the rewind 
+            momentum = rb.velocity;
+
+
+            //used for initializing clones
             rewindingStartedLastFrame = true;
         }
     }
