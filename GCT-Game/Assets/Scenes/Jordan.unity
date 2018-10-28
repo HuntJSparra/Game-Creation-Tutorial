@@ -412,6 +412,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd319d5cda02b84eb2225632017438e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ClonePrefab: {fileID: 1008623839776492, guid: 2d434f538a561ad45b0a0c23252de9b7,
+    type: 2}
 --- !u!61 &1391250802
 BoxCollider2D:
   m_ObjectHideFlags: 0

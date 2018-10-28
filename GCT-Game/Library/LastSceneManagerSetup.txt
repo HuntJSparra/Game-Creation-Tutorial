@@ -1,8 +1,4 @@
 sceneSetups:
-<<<<<<< Updated upstream
-- path: Assets/Scenes/Hunt.unity
-=======
 - path: Assets/Scenes/Jordan.unity
->>>>>>> Stashed changes
   isLoaded: 1
   isActive: 1

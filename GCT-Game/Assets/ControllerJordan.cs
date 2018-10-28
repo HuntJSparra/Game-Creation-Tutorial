@@ -13,7 +13,7 @@ public class ControllerJordan : MonoBehaviour {
     private int CurFrame; //current frame that you're on
     private bool CurRewind;
     private int rewindDist;
-    private Object ClonePrefab;
+    public Object ClonePrefab;
 
     //private RaycastHit2D hit;
 
@@ -21,21 +21,24 @@ public class ControllerJordan : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         velMod = 5;
         jumpForce = 300;
-        CurRewind = false;
-        ClonePrefab = Resources.Load("Clone.prefab");
+        rewindDist = 0;
+       // ClonePrefab = Resources.Load("Clone.prefab");
     }
     
     private void Update(){
 
         if (Input.GetKey("e")) /*hold down e to rewind*/{
-            if (CurRewind == false)
+            if (Input.GetKeyDown("e"))
             {
-                CurRewind = true;
                 rewindDist = 0;
                 pressedKey.Push("e");
+                Stack<Vector3> newRewind = new Stack<Vector3>();
+                Stack<Vector2> newMove = new Stack<Vector2>();
+                Stack<string> newKey = new Stack<string>();
+                //CloneController control = 
                 GameObject newClone = (GameObject)Instantiate(ClonePrefab, transform.position, new Quaternion());
-                CloneController control = newClone.GetComponent<CloneController>();
-                control = new CloneController(rewindStack, moveStack, pressedKey);
+                CloneController cc = newClone.GetComponent<CloneController>();
+                cc = new CloneController(newRewind, newMove, newKey);
 
             }
             if (rewindDist<rewindStack.Count) /* so we don't go back too far in time*/{
@@ -45,9 +48,11 @@ public class ControllerJordan : MonoBehaviour {
         }
         else /*playable*/{
             //adds current location to rewinding dictionary
-            rewindStack.Push(transform.position);
-            moveStack.Push(rb.velocity);
-            print(" Adding " + Time.frameCount + " " + transform.position); //prints out where you are going next // Get rid of later
+            Vector3 curPos = transform.position;
+            rewindStack.Push(curPos);
+            Vector2 curVel = rb.velocity;
+            moveStack.Push(curVel);
+            //print(" Adding " + Time.frameCount + " " + transform.position); //prints out where you are going next // Get rid of later
             //float dist = .51F;
             Vector2 jump = new Vector2(0.0f, jumpForce);
             //hit = Physics2D.Raycast(rb.transform.position, Vector2.down, dist);
@@ -57,7 +62,6 @@ public class ControllerJordan : MonoBehaviour {
 
             //when we rewind we need a frame to start from
             CurFrame = Time.frameCount;
-            CurRewind = false;
             pressedKey.Push(rewindDist.ToString());
         }
         

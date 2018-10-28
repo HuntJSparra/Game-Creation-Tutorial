@@ -7,9 +7,9 @@ public class CloneController : MonoBehaviour {
     private Rigidbody2D rb; // ridgid body for this object
     private float velMod; //how fast we scale movement left and right
     private float jumpForce; //how much of a force we're applying upwards when we jump
-    private Stack<Vector3> rewindStack = new Stack<Vector3>();
-    private Stack<Vector2> moveStack = new Stack<Vector2>();
-    private Stack<string> pressedKey = new Stack<string>();
+    private Stack<Vector3> rewindStack;
+    private Stack<Vector2> moveStack;
+    private Stack<string> pressedKey;
     private Stack<Vector3> forwardStack = new Stack<Vector3>();
     private Stack<Vector2> nextMoveStack = new Stack<Vector2>();
     private Stack<string> pressKey = new Stack<string>();
@@ -19,7 +19,9 @@ public class CloneController : MonoBehaviour {
 
     public CloneController(Stack<Vector3> firstPos, Stack<Vector2> firstMove, Stack<string> keyPress)
     {
+        Debug.Log(firstPos);
         rewindStack = firstPos;
+        print(rewindStack);
         moveStack = firstMove;
         pressedKey = keyPress;
 
@@ -48,7 +50,7 @@ public class CloneController : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         velMod = 5;
         jumpForce = 300;
-        CurRewind = false;
+        rewindDist = 0;
     }
 
     private void Update()
@@ -56,11 +58,11 @@ public class CloneController : MonoBehaviour {
 
         if (Input.GetKey("e")) /*hold down e to rewind*/
         {
-            if (CurRewind == false)
+            if (Input.GetKeyDown("e"))
             {
-                CurRewind = true;
                 rewindDist = 0;
             }
+            print(rewindStack);
             if (rewindDist < rewindStack.Count) /* so we don't go back too far in time*/
             {
                 Vector3 rewindingPos = rewindStack.Pop();
@@ -87,9 +89,10 @@ public class CloneController : MonoBehaviour {
             pressedKey.Push(nextKey);
             if (nextKey.Equals("e"))
             {
+                CloneController control = new CloneController(rewindStack, moveStack, pressedKey, System.Convert.ToInt32(pressKey.Peek()));
                 GameObject newClone = Instantiate(gameObject, transform.position, new Quaternion());
-                CloneController control = newClone.GetComponent<CloneController>();
-                control = new CloneController(rewindStack, moveStack, pressedKey, System.Convert.ToInt32(pressKey.Peek()));
+                CloneController cc = newClone.GetComponent<CloneController>();
+                cc = control;
             }
             print(" Adding " + Time.frameCount + " " + transform.position); //prints out where you are going next // Get rid of later
             //float dist = .51F;
