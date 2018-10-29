@@ -4,4 +4,4 @@ Upload Test:
 [X] Hugh Connected
 [X] William Connected
 [X] Jordan Connected
-[ ] Tommy Connected
+[X] Tommy Connected
