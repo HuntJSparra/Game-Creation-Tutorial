@@ -6,14 +6,15 @@ using UnityEngine;
 //William
 public class Controller2D : MonoBehaviour {
 
-    private Rigidbody2D rb; // rigid body for this object
+    private Rigidbody2D rb; // Rigidbody for this object
     private float velMod; //how fast we scale movement left and right
     private float jumpForce; //how much of a force we're applying upwards when we jump
-    private Dictionary<int, Vector3> rewindDict = new Dictionary<int, Vector3>();
+    private Dictionary<int, Vector3[]> rewindDict = new Dictionary<int, Vector3[]>();
     private bool rewindingStartedLastFrame = true;
     private int currentTime; // current time that we are on (is subtracted while we're going back in time)
     private Vector2 momentum; //current velocity of the player 
-    public GameObject guy;
+    public GameObject guy; //the starter clone
+    private int spawnFrame = 1;
     //private RaycastHit2D hit;
 
 	void Start () {
@@ -26,31 +27,34 @@ public class Controller2D : MonoBehaviour {
     {
         if (Input.GetKey("e")) //hold down e to rewind
         {
-            Debug.Log("Has the key!");
             Quaternion empty = new Quaternion();
             //setting up a clone
-            if (rewindingStartedLastFrame)
+            if(rewindingStartedLastFrame)
             {
                 Vector3 currentPos = transform.position;
-                GameObject clone = Instantiate(guy, currentPos, empty);
-
+                GameObject clone =  Instantiate(guy, currentPos, empty);
+                
                 clone.GetComponent<SpriteRenderer>().enabled = true;
-                Dictionary<int, Vector3> temp = new Dictionary<int, Vector3>();
-                for(int i = 1; i < currentTime; i++)
+                //for deep copying
+                Dictionary<int, Vector3[]> temp = new Dictionary<int, Vector3[]>();
+                for(int i = spawnFrame; i < currentTime; i++)
                 {
                     temp.Add(i, rewindDict[i]);
                 }
                 clone.GetComponent<CloneScript>().updateDictionary(temp);
-                print("spawning a guy");
+                
+                //print("spawning a guy");
                 
                 rewindingStartedLastFrame = false;
             }
 
-            //removing the position 
-            rewindDict.Remove(currentTime);
-            currentTime = currentTime - 1;
-
-            
+            //removing the position from rewind dict
+            //rewindDict.Remove(currentTime);
+            if (currentTime > 1)
+            {
+                currentTime = currentTime - 1;
+                spawnFrame = currentTime;
+            }
         }
         else //playable
         {
@@ -58,7 +62,7 @@ public class Controller2D : MonoBehaviour {
             currentTime = currentTime + 1;
 
             //adds current location to rewinding dictionary
-            rewindDict.Add(currentTime, transform.position);
+            rewindDict[currentTime] = new Vector3[] { transform.position, rb.velocity };
             //print(" Adding " + Time.frameCount + " " + transform.position); //prints out where you are going next // Get rid of later
 
             //float dist = .51F;
@@ -73,7 +77,7 @@ public class Controller2D : MonoBehaviour {
             {
                 rb.bodyType = RigidbodyType2D.Dynamic;
                 //sets velocity of player character to momentum;
-                print("setting the velocity to momentum");
+                //print("setting the velocity to momentum");
                 rb.velocity = momentum;
             }
 
