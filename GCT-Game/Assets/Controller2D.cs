@@ -7,89 +7,57 @@ using UnityEngine;
 public class Controller2D : MonoBehaviour {
 
     private Rigidbody2D rb; // Rigidbody for this object
-    private float velMod; //how fast we scale movement left and right
-    private float jumpForce; //how much of a force we're applying upwards when we jump
-    private Dictionary<int, Vector3[]> rewindDict = new Dictionary<int, Vector3[]>(); //The array at [0] is position and at [1] is velocity
-    private bool rewindingStartedLastFrame = true; //used for instantiating clone
+    private const float velMod = 5; // how fast we scale movement left and right
+    private const float jumpForce = 300; // how much of a force we're applying upwards when we jump
+    private Dictionary<int, Vector3[]> rewindDict = new Dictionary<int, Vector3[]>(); // The array at [0] is position and at [1] is velocity
+    private bool rewindingStartedLastFrame = true; // used for instantiating clone
     private int currentTime; // current time that we are on (is subtracted while we're going back in time)
-    private Vector2 momentum; //current velocity of the player 
-    public GameObject guy; //the starter clone
-    private int spawnFrame = 1;
-    //private RaycastHit2D hit;
+    public GameObject guy; // the starter clone
+    private int spawnFrame = 1; // how far back we copy the dictionary too
 
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
-        velMod = 5;
-        jumpForce = 300;
 	}
     
     private void Update()
     {
-        if (Input.GetKey("e")) //if rewinding
+        if (Input.GetKey("e")) // if rewinding
         {
-            Quaternion empty = new Quaternion();
-            //setting up a clone
+            // setting up a clone
             if(rewindingStartedLastFrame)
-            {
-                Vector3 currentPos = transform.position;
-                GameObject clone =  Instantiate(guy, currentPos, empty);
-                
-                clone.GetComponent<SpriteRenderer>().enabled = true;
-                //for deep copying
-                Dictionary<int, Vector3[]> temp = new Dictionary<int, Vector3[]>();
-                for(int i = spawnFrame; i < currentTime; i++)
-                {
-                    temp.Add(i, rewindDict[i]);
-                }
-                clone.GetComponent<CloneScript>().updateDictionary(temp);
-                
-                rewindingStartedLastFrame = false;
-            }
+                createClone();
 
-            //removing the position from rewind dict
-            //rewindDict.Remove(currentTime);
+            // Sets the current time back and sets spawn frame to the right value;
             if (currentTime > 1)
             {
                 currentTime = currentTime - 1;
                 spawnFrame = currentTime;
             }
         }
-        else //playable
+        else // playable
         {
-            //The current time 
+            // The current time 
             currentTime = currentTime + 1;
 
-            //adds current location to rewinding dictionary
+            // adds current location to rewinding dictionary
             rewindDict[currentTime] = new Vector3[] { transform.position, rb.velocity };
-            //print(" Adding " + Time.frameCount + " " + transform.position); //prints out where you are going next // Get rid of later
 
-            //float dist = .51F;
-            Vector2 jump = new Vector2(0.0f, jumpForce);
-            //hit = Physics2D.Raycast(rb.transform.position, Vector2.down, dist);
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                rb.AddForce(jump);
-            }
+            jump();
 
+            // turns the players movement back on if they just stopped rewinding, in use so the character stops while rewinding
             if(rewindingStartedLastFrame == false)
             {
                 rb.bodyType = RigidbodyType2D.Dynamic;
-                //sets velocity of player character to momentum;
-                //print("setting the velocity to momentum");
-                rb.velocity = momentum;
             }
 
-            //gets the velocity of the player character so after they rewind they are still moving in the direction before the rewind 
-            momentum = rb.velocity;
-
-            //used for initializing clones
+            // used for initializing clones
             rewindingStartedLastFrame = true;
         }
     }
 
     // Update is called once per frame
     void FixedUpdate () {
-        if (Input.GetKey("e")) //hold down e to rewind
+        if (Input.GetKey("e")) // hold down e to rewind
         {
             rb.bodyType = RigidbodyType2D.Static;
         }
@@ -103,5 +71,32 @@ public class Controller2D : MonoBehaviour {
     public int getTime()
     {
         return currentTime;
+    }
+
+    public void createClone()
+    {
+        Quaternion empty = new Quaternion();
+        Vector3 currentPos = transform.position;
+        GameObject clone = Instantiate(guy, currentPos, empty);
+
+        clone.GetComponent<SpriteRenderer>().enabled = true;
+        // for deep copying
+        Dictionary<int, Vector3[]> temp = new Dictionary<int, Vector3[]>();
+        for (int i = spawnFrame; i < currentTime; i++)
+        {
+            temp.Add(i, rewindDict[i]);
+        }
+        clone.GetComponent<CloneScript>().updateDictionary(temp);
+
+        rewindingStartedLastFrame = false;
+    }
+
+    public void jump()
+    {
+        Vector2 jump = new Vector2(0.0f, jumpForce);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.AddForce(jump);
+        }
     }
 }
