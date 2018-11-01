@@ -9,8 +9,8 @@ public class Controller2D : MonoBehaviour {
     private Rigidbody2D rb; // Rigidbody for this object
     private float velMod; //how fast we scale movement left and right
     private float jumpForce; //how much of a force we're applying upwards when we jump
-    private Dictionary<int, Vector3[]> rewindDict = new Dictionary<int, Vector3[]>();
-    private bool rewindingStartedLastFrame = true;
+    private Dictionary<int, Vector3[]> rewindDict = new Dictionary<int, Vector3[]>(); //The array at [0] is position and at [1] is velocity
+    private bool rewindingStartedLastFrame = true; //used for instantiating clone
     private int currentTime; // current time that we are on (is subtracted while we're going back in time)
     private Vector2 momentum; //current velocity of the player 
     public GameObject guy; //the starter clone
@@ -25,7 +25,7 @@ public class Controller2D : MonoBehaviour {
     
     private void Update()
     {
-        if (Input.GetKey("e")) //hold down e to rewind
+        if (Input.GetKey("e")) //if rewinding
         {
             Quaternion empty = new Quaternion();
             //setting up a clone
@@ -42,8 +42,6 @@ public class Controller2D : MonoBehaviour {
                     temp.Add(i, rewindDict[i]);
                 }
                 clone.GetComponent<CloneScript>().updateDictionary(temp);
-                
-                //print("spawning a guy");
                 
                 rewindingStartedLastFrame = false;
             }
@@ -68,7 +66,7 @@ public class Controller2D : MonoBehaviour {
             //float dist = .51F;
             Vector2 jump = new Vector2(0.0f, jumpForce);
             //hit = Physics2D.Raycast(rb.transform.position, Vector2.down, dist);
-            if (Input.GetKeyDown(KeyCode.Space))
+            if(Input.GetKeyDown(KeyCode.Space))
             {
                 rb.AddForce(jump);
             }
@@ -81,10 +79,8 @@ public class Controller2D : MonoBehaviour {
                 rb.velocity = momentum;
             }
 
-
             //gets the velocity of the player character so after they rewind they are still moving in the direction before the rewind 
             momentum = rb.velocity;
-
 
             //used for initializing clones
             rewindingStartedLastFrame = true;
@@ -96,7 +92,6 @@ public class Controller2D : MonoBehaviour {
         if (Input.GetKey("e")) //hold down e to rewind
         {
             rb.bodyType = RigidbodyType2D.Static;
-
         }
         else
         {

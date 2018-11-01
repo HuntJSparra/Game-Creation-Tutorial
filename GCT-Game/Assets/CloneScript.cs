@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
 //William
 public class CloneScript : MonoBehaviour {
 
