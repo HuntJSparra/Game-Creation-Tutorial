@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+//add code for turning off box colider
+
+
+
 //William
 public class CloneScript : MonoBehaviour {
 
@@ -10,9 +14,11 @@ public class CloneScript : MonoBehaviour {
     public GameObject player;
     int currentTime;
     private Rigidbody2D rb; // Rigidbody for this object
+    private BoxCollider2D bc; //box collider 
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
+        
     }
 	
 	// Update is called once per frame
@@ -60,13 +66,10 @@ public class CloneScript : MonoBehaviour {
         
     }
     
-
-
     public void updateDictionary(Dictionary<int, Vector3[]> temp)
     {
         rewindDict = temp;
         print("Got a new dictionary");
         currentTime = player.GetComponent<Controller2D>().getTime();
     }
-
 }
