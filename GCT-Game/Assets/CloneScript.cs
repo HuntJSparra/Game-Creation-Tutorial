@@ -46,7 +46,7 @@ public class CloneScript : MonoBehaviour {
                 // paradox checking by velocity
                 if (!transform.position.Equals(rewindingPos))
                 {
-                    print("Paradox");
+                    print("Paradox by Velocity");
                 }
             }
             else // this clone isn't in the game at this time so disappear 
@@ -60,7 +60,6 @@ public class CloneScript : MonoBehaviour {
     public void updateDictionary(Dictionary<int, Vector3[]> temp)
     {
         rewindDict = temp;
-        print("Got a new dictionary");
         currentTime = player.GetComponent<Controller2D>().getTime();
     }
 

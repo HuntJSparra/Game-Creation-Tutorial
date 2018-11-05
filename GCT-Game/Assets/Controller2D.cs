@@ -14,6 +14,7 @@ public class Controller2D : MonoBehaviour {
     private int currentTime; // current time that we are on (is subtracted while we're going back in time)
     public GameObject guy; // the starter clone
     private int spawnFrame = 1; // how far back we copy the dictionary too
+    private Vector2 directionFacing; //direction the player character is facing, either [1,0] or [-1,0]
 
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -39,8 +40,11 @@ public class Controller2D : MonoBehaviour {
             // The current time 
             currentTime = currentTime + 1;
 
-            // adds current location to rewinding dictionary
-            rewindDict[currentTime] = new Vector3[] { transform.position, rb.velocity };
+            //have to write down what direction the player is facing so that the clones know when they're doing checking
+            writeDownDirection();
+
+            // adds current location, current velocity, and direction the player is facing to rewinding dictionary
+            rewindDict[currentTime] = new Vector3[] { transform.position, rb.velocity, directionFacing};
 
             jump();
 
@@ -97,6 +101,17 @@ public class Controller2D : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(jump);
+        }
+    }
+
+    public void writeDownDirection()
+    {
+        if (Input.GetAxis("Horizontal") != 0)
+        {
+            if (Input.GetAxis("Horizontal") > 0)
+                directionFacing = Vector2.right;
+            else
+                directionFacing = Vector2.left;
         }
     }
 }
