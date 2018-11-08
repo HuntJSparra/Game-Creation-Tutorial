@@ -85,4 +85,20 @@ public class CloneScript : MonoBehaviour {
         rb.velocity = rewindingVelo;
         return rewindingPos;
     }
+
+    public void paradoxChecking()
+    {
+        LayerMask mask = LayerMask.GetMask("Player");
+
+        RaycastHit2D hit = Physics2D.Raycast(rb.position, rewindDict[currentTime][2], Mathf.Infinity, mask);
+        Collider2D cloneCollider = hit.collider;
+        if (cloneCollider != null )
+        {
+            if (cloneCollider.enabled == true)
+            {
+                print("Paradox by clones");
+            }
+        }
+    }
+
 }
