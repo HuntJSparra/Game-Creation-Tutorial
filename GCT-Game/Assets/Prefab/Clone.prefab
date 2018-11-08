@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 50721678294006262}
   - component: {fileID: 61033571591240970}
   - component: {fileID: 114128266883006420}
+  - component: {fileID: 70891528733426058}
   m_Layer: 0
   m_Name: Clone
   m_TagString: Player
@@ -37,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1008623839776492}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.838, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -69,7 +70,7 @@ BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1008623839776492}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 6200000, guid: 9ddb7dbb9642ef8428fbfefb8610a1af, type: 2}
   m_IsTrigger: 0
@@ -88,6 +89,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.47, y: 1.05}
   m_EdgeRadius: 0
+--- !u!70 &70891528733426058
+CapsuleCollider2D:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1008623839776492}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 9ddb7dbb9642ef8428fbfefb8610a1af, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.47, y: 1.1}
+  m_Direction: 0
 --- !u!114 &114128266883006420
 MonoBehaviour:
   m_ObjectHideFlags: 1

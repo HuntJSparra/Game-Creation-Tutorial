@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,11 +15,13 @@ public class CloneScript : MonoBehaviour {
     public GameObject player;
     private int currentTime;
     private Rigidbody2D rb; // Rigidbody for this object
-    private BoxCollider2D bc; // box collider 
+    private CapsuleCollider2D bc; // box collider 
+    private float acceptableDifferenceInPosition = .5f; //this is how far it is ok to be away from the actual position of where the 
+                                                        //clone is now vs where the player was at that time
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
-        bc = GetComponent<BoxCollider2D>();
+        bc = GetComponent<CapsuleCollider2D>();
     }
 	
 	// Update is called once per frame
@@ -44,10 +47,13 @@ public class CloneScript : MonoBehaviour {
                 Vector3 rewindingPos = goingForwards();
 
                 // paradox checking by velocity
-                if (!transform.position.Equals(rewindingPos))
+                
+                if (paradoxByVelocity(rewindingPos, transform.position))
                 {
                     print("Paradox by Velocity");
                 }
+
+                paradoxBySeeing();
             }
             else // this clone isn't in the game at this time so disappear 
             {
@@ -86,19 +92,31 @@ public class CloneScript : MonoBehaviour {
         return rewindingPos;
     }
 
-    public void paradoxChecking()
+    public void paradoxBySeeing()
     {
         LayerMask mask = LayerMask.GetMask("Player");
 
-        RaycastHit2D hit = Physics2D.Raycast(rb.position, rewindDict[currentTime][2], Mathf.Infinity, mask);
-        Collider2D cloneCollider = hit.collider;
-        if (cloneCollider != null )
+        //print("Clone is facing" + rewindDict[currentTime][2]);
+        RaycastHit2D hit = Physics2D.Raycast(rb.position, rewindDict[currentTime][2], 500.0f, mask);
+        Collider2D playerCollider = hit.collider;
+        if (playerCollider != null )
         {
-            if (cloneCollider.enabled == true)
+            //print("Is playerCollider on?" + playerCollider.enabled);
+            if (playerCollider.enabled == true)
             {
-                print("Paradox by clones");
+                print("Paradox where a clone saw you");
             }
         }
+    }
+
+    public bool paradoxByVelocity(Vector2 positionInDictionary, Vector2 currentPosition)
+    {
+        if( Math.Abs(positionInDictionary.x - currentPosition.x) >= acceptableDifferenceInPosition)
+            return true;
+        if( Math.Abs(positionInDictionary.y - currentPosition.y) >= acceptableDifferenceInPosition)
+            return true;
+
+        return false;
     }
 
 }

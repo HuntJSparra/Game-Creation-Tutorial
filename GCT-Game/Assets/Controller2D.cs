@@ -44,6 +44,7 @@ public class Controller2D : MonoBehaviour {
             writeDownDirection();
 
             // adds current location, current velocity, and direction the player is facing to rewinding dictionary
+            //print("Direction facing" + directionFacing);
             rewindDict[currentTime] = new Vector3[] { transform.position, rb.velocity, directionFacing};
 
             jump();
