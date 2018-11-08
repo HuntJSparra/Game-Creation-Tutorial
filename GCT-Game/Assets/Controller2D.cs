@@ -14,7 +14,7 @@ public class Controller2D : MonoBehaviour {
     private int currentTime; // current time that we are on (is subtracted while we're going back in time)
     public GameObject guy; // the starter clone
     private int spawnFrame = 1; // how far back we copy the dictionary too
-    private Vector2 directionFacing; //direction the player character is facing, either [1,0] or [-1,0]
+    private Vector2 directionFacing; //direction the player character is facing, either [1,0] or [-1,0] (or [0,0] if the player hasn't moved yet)
 
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -72,6 +72,7 @@ public class Controller2D : MonoBehaviour {
         }
     }
 
+    //called by the clones so they can get the current time
     public int getTime()
     {
         return currentTime;
@@ -79,8 +80,8 @@ public class Controller2D : MonoBehaviour {
 
     public void createClone()
     {
-        Quaternion empty = new Quaternion();
         Vector3 currentPos = transform.position;
+        Quaternion empty = new Quaternion();
         GameObject clone = Instantiate(guy, currentPos, empty);
 
         clone.GetComponent<SpriteRenderer>().enabled = true;
@@ -106,7 +107,6 @@ public class Controller2D : MonoBehaviour {
             {
                 rb.AddForce(jump);
             }
-
         }
     }
 
@@ -120,7 +120,4 @@ public class Controller2D : MonoBehaviour {
                 directionFacing = Vector2.left;
         }
     }
-
-
-
 }
