@@ -115,10 +115,20 @@ public class Controller2DAnimated : MonoBehaviour {
 
     public void jump()
     {
+        LayerMask mask = LayerMask.GetMask("Platform");
+        
         Vector2 jump = new Vector2(0.0f, jumpForce);
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            rb.AddForce(jump);
-        }
+            if (Physics2D.Raycast(rb.position, Vector2.down, 1.0f, mask))
+            {
+                animator.SetBool("Falling", false);
+                if (Input.GetKeyDown(KeyCode.Space))
+                { 
+                    animator.SetBool("Jumping", true);
+                    rb.AddForce(jump);
+                }
+            } else {
+                animator.SetBool("Jumping", false);
+                animator.SetBool("Falling", true); 
+            }
     }
 }
