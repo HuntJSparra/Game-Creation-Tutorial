@@ -26,7 +26,7 @@ public class CloneScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        currentTime = player.GetComponent<Controller2D>().getTime();
+        currentTime = player.GetComponent<ControllerJordan>().getTime();
         if (Input.GetKey("e")) // hold down e to rewind
         {
             // setting position if this clone is in the dictionary
@@ -66,7 +66,7 @@ public class CloneScript : MonoBehaviour {
     public void updateDictionary(Dictionary<int, Vector3[]> temp)
     {
         rewindDict = temp;
-        currentTime = player.GetComponent<Controller2D>().getTime();
+        currentTime = player.GetComponent<ControllerJordan>().getTime();
     }
 
     public void goingBackwards()
