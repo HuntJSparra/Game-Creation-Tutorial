@@ -16,14 +16,20 @@ public class ControllerJordan : MonoBehaviour
     public GameObject guy; // the starter clone
     private int spawnFrame = 1; // how far back we copy the dictionary too
     private Vector2 directionFacing; //direction the player character is facing, either [1,0] or [-1,0] (or [0,0] if the player hasn't moved yet)
-    private BoxCollider2D bc;
+    private Collider2D bc;
     private bool entered;
+    private bool onWall;
+    private Climable climbing;
+    Vector3 passOnWall;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        bc = GetComponent<BoxCollider2D>();
+        bc = GetComponent<Collider2D>();
+        passOnWall = Vector3.zero;
         entered = false;
+        onWall = false;
+        climbing = new Climable();
     }
 
     private void Update()
@@ -51,17 +57,18 @@ public class ControllerJordan : MonoBehaviour
 
             // adds current location, current velocity, and direction the player is facing to rewinding dictionary
             //print("Direction facing" + directionFacing);
-            rewindDict[currentTime] = new Vector3[] { transform.position, rb.velocity, directionFacing };
 
-            if (entered)
+            if (onWall)
             {
-                climb();
+                passOnWall = Vector3.one;
             }
             else
             {
-                jump();
+                passOnWall = Vector3.zero;
             }
 
+            rewindDict[currentTime] = new Vector3[] { transform.position, rb.velocity, directionFacing, passOnWall };
+            
             // turns the players movement back on if they just stopped rewinding, in use so the character stops while rewinding
             if (rewindingStartedLastFrame == false)
             {
@@ -84,6 +91,8 @@ public class ControllerJordan : MonoBehaviour
         {
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.velocity = new Vector2(Input.GetAxis("Horizontal") * velMod, rb.velocity.y);
+            climb();
+            jump();
         }
     }
 
@@ -106,7 +115,7 @@ public class ControllerJordan : MonoBehaviour
         {
             temp.Add(i, rewindDict[i]);
         }
-        clone.GetComponent<CloneScript>().updateDictionary(temp);
+        clone.GetComponent<JordanClones>().updateDictionary(temp);
 
         rewindingStartedLastFrame = false;
     }
@@ -114,6 +123,7 @@ public class ControllerJordan : MonoBehaviour
     public void jump()
     {
         LayerMask mask = LayerMask.GetMask("Platform");
+        LayerMask climbable = LayerMask.GetMask("TransparentFX");
 
         Vector2 jump = new Vector2(0.0f, jumpForce);
         if (Input.GetKeyDown(KeyCode.Space))
@@ -122,7 +132,12 @@ public class ControllerJordan : MonoBehaviour
             {
                 rb.AddForce(jump);
             }
-            entered = false;
+            else  if (Physics2D.Raycast(rb.position, Vector2.down, 1.0f, climbable)&onWall)
+            {
+                onWall = false;
+                climbing.OffClimbable(bc);
+                rb.AddForce(jump);
+            }
         }
     }
 
@@ -142,6 +157,7 @@ public class ControllerJordan : MonoBehaviour
         if(collision.tag == "Climbable")
         {
             entered = true;
+            climbing = collision.GetComponent<Climable>();
         }
     }
 
@@ -150,22 +166,36 @@ public class ControllerJordan : MonoBehaviour
         if (collision.tag == "Climbable")
         {
             entered = false;
+            onWall = false;
+            climbing.OffClimbable(bc);
+            climbing = new Climable();
         }
     }
 
     public void climb()
     {
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        if (entered & !onWall)
         {
-            rb.velocity = new Vector2(rb.velocity.x, 2);
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            {
+                onWall = true;
+                climbing.OnClimbable(bc);
+            }
         }
-        else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        if (onWall)
         {
-            rb.velocity = new Vector2(rb.velocity.x, -2);
-        }
-        else
-        {
-            rb.velocity = new Vector2(rb.velocity.x, 0);
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 2);
+            }
+            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            {
+                rb.velocity = new Vector2(rb.velocity.x, -2);
+            }
+            else
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+            }
         }
     }
 }

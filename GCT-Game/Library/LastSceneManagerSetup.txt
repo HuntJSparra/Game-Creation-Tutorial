@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Hunt.unity
+- path: Assets/Scenes/Jordan.unity
   isLoaded: 1
   isActive: 1
