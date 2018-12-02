@@ -14,6 +14,13 @@ public class Controller2DAnimated : MonoBehaviour {
     private int currentTime; // current time that we are on (is subtracted while we're going back in time)
     public GameObject guy; // the starter clone
     private int spawnFrame = 1; // how far back we copy the dictionary too
+    private bool entered;
+
+    // Wall-Related
+    private Collider2D bc;
+    private bool onWall;
+    private Climable climbing;
+    Vector3 passOnWall;
 
     // Animation-Related
     private Animator animator;
@@ -21,9 +28,15 @@ public class Controller2DAnimated : MonoBehaviour {
 
     void Start () {
         rb = GetComponent<Rigidbody2D>();
+        bc = GetComponent<Collider2D>();
 
         animator = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
+
+        passOnWall = Vector3.zero;
+        entered = false;
+        onWall = false;
+        climbing = new Climable();
     }
     
     private void Update()
@@ -49,8 +62,6 @@ public class Controller2DAnimated : MonoBehaviour {
             // adds current location to rewinding dictionary
             rewindDict[currentTime] = new Vector3[] { transform.position, rb.velocity };
 
-            jump();
-
             // turns the players movement back on if they just stopped rewinding, in use so the character stops while rewinding
             if(rewindingStartedLastFrame == false)
             {
@@ -59,6 +70,19 @@ public class Controller2DAnimated : MonoBehaviour {
 
             // used for initializing clones
             rewindingStartedLastFrame = true;
+
+            // wall stuff
+            if (onWall)
+            {
+                passOnWall = Vector3.one;
+            }
+            else
+            {
+                passOnWall = Vector3.zero;
+            }
+
+            jump();
+            climb();
         }
     }
 
@@ -122,7 +146,7 @@ public class Controller2DAnimated : MonoBehaviour {
             {
                 animator.SetBool("Falling", false);
                 if (Input.GetKeyDown(KeyCode.Space))
-                { 
+                {
                     animator.SetBool("Jumping", true);
                     rb.AddForce(jump);
                 }
@@ -130,5 +154,52 @@ public class Controller2DAnimated : MonoBehaviour {
                 animator.SetBool("Jumping", false);
                 animator.SetBool("Falling", true); 
             }
+    }
+
+    public void climb()
+    {
+        if (entered & !onWall)
+        {
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            {
+                onWall = true;
+                climbing.OnClimbable(bc);
+            }
+        }
+        if (onWall)
+        {
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 2);
+            }
+            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            {
+                rb.velocity = new Vector2(rb.velocity.x, -2);
+            }
+            else
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+            }
+        }
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Climbable")
+        {
+            entered = true;
+            climbing = collision.GetComponent<Climable>();
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Climbable")
+        {
+            entered = false;
+            onWall = false;
+            climbing.OffClimbable(bc);
+            climbing = new Climable();
+        }
     }
 }
