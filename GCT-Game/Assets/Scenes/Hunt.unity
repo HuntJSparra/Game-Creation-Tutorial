@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 66734972}
   - component: {fileID: 66734971}
   - component: {fileID: 66734974}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: RockwallCollider
   m_TagString: Climbable
   m_Icon: {fileID: 0}
@@ -239,6 +239,7 @@ GameObject:
   - component: {fileID: 132895055}
   - component: {fileID: 132895050}
   - component: {fileID: 132895051}
+  - component: {fileID: 132895056}
   m_Layer: 0
   m_Name: Player Character
   m_TagString: Player
@@ -255,7 +256,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.03746581, y: 0.106221706}
@@ -380,6 +381,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!70 &132895056
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 132895049}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.03746581, y: 0.1062217}
+  m_Size: {x: 1.105248, y: 2.007557}
+  m_Direction: 0
 --- !u!1 &275076357
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,6 +816,7 @@ GameObject:
   - component: {fileID: 447730576}
   - component: {fileID: 447730574}
   - component: {fileID: 447730575}
+  - component: {fileID: 447730579}
   m_Layer: 0
   m_Name: Clone Starter
   m_TagString: Player
@@ -816,7 +833,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 6200000, guid: 9ddb7dbb9642ef8428fbfefb8610a1af, type: 2}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.03, y: 0}
@@ -923,6 +940,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &447730579
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 447730573}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 9ddb7dbb9642ef8428fbfefb8610a1af, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.03, y: 0}
+  m_Size: {x: 0.47, y: 1.05}
+  m_Direction: 0
 --- !u!1 &516152704
 GameObject:
   m_ObjectHideFlags: 0
