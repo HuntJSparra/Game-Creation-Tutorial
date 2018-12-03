@@ -142,16 +142,29 @@ public class Controller2DAnimated : MonoBehaviour {
         LayerMask mask = LayerMask.GetMask("Platform");
         
         Vector2 jump = new Vector2(0.0f, jumpForce);
-            if (Physics2D.Raycast(rb.position, Vector2.down, 1.0f, mask))
+        if (Physics2D.Raycast(rb.position, Vector2.down, 1.0f, mask))
+        {
+            animator.SetBool("Falling", false);
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                animator.SetBool("Falling", false);
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    animator.SetBool("Jumping", true);
-                    rb.AddForce(jump);
-                }
-            } else {
-                animator.SetBool("Jumping", false);
+                animator.SetBool("Jumping", true);
+                rb.AddForce(jump);
+            }
+        }
+        else if (Physics2D.Raycast(rb.position, Vector2.down, 1.0f, climbable) & onWall)
+        {
+            animator.SetBool("Falling", false);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                animator.SetBool("Jumping", true);
+                onWall = false;
+                climbing.OffClimbable(bc);
+                rb.AddForce(jump);
+            }
+        }
+        else
+        {
+            animator.SetBool("Jumping", false);
                 animator.SetBool("Falling", true); 
             }
     }
