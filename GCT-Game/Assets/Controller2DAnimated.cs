@@ -163,6 +163,7 @@ public class Controller2DAnimated : MonoBehaviour {
             if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
             {
                 onWall = true;
+                animator.SetBool("Climbing", true);
                 climbing.OnClimbable(bc);
             }
         }
@@ -198,6 +199,7 @@ public class Controller2DAnimated : MonoBehaviour {
         {
             entered = false;
             onWall = false;
+            animator.SetBool("Climbing", false);
             climbing.OffClimbable(bc);
             climbing = new Climable();
         }

@@ -19,8 +19,10 @@ public class BasketScript : MonoBehaviour {
 
     private BasketSegment basket;
     private BasketSegment rope;
+    private BasketSegment gateSegment;
 
     private Transform lastSegment;
+    public Transform gate;
 
 	// Use this for initialization
 	void Start() {
@@ -31,6 +33,8 @@ public class BasketScript : MonoBehaviour {
         rope = new BasketSegment(ropeTransform.position, ropeTransform);
 
         lastSegment = basketTransform.GetChild(0);
+
+        gateSegment = new BasketSegment(gate.transform.position, gate);
 	}
 	
 	// Update is called once per frame
@@ -52,8 +56,9 @@ public class BasketScript : MonoBehaviour {
                     lastSegment.gameObject.GetComponent<SpriteRenderer>().enabled = true;
                 }
             }
-        } else {
         }
+
+        gate.transform.position = gateSegment.originalPosition + (basket.originalPosition - basket.segment.position);
 	}
 
     void OnCollisionEnter2D(Collision2D col) {
