@@ -140,7 +140,8 @@ public class Controller2DAnimated : MonoBehaviour {
     public void jump()
     {
         LayerMask mask = LayerMask.GetMask("Platform");
-        
+        LayerMask climbable = LayerMask.GetMask("TransparentFX");
+
         Vector2 jump = new Vector2(0.0f, jumpForce);
         if (Physics2D.Raycast(rb.position, Vector2.down, 1.0f, mask))
         {
