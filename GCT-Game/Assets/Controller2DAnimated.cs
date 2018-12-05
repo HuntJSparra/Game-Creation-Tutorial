@@ -15,6 +15,7 @@ public class Controller2DAnimated : MonoBehaviour {
     public GameObject guy; // the starter clone
     private int spawnFrame = 1; // how far back we copy the dictionary too
     private bool entered;
+    private Vector2 directionFacing; //direction the player character is facing, either [1,0] or [-1,0] (or [0,0] if the player hasn't moved yet)
 
     // Wall-Related
     private Collider2D bc;
@@ -63,6 +64,8 @@ public class Controller2DAnimated : MonoBehaviour {
             // The current time
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.velocity = new Vector2(Input.GetAxis("Horizontal") * velMod, rb.velocity.y);
+            //have to write down what direction the player is facing so that the clones know when they're doing checking
+            writeDownDirection();
 
             // Animation-related
             if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.3)
@@ -70,7 +73,7 @@ public class Controller2DAnimated : MonoBehaviour {
             else
                 animator.SetBool("Running", false);
 
-            // Face the correct direction
+            // Face the correct direction for sprite
             if (Input.GetAxis("Horizontal") > 0)
                 sr.flipX = false;
             else if (Input.GetAxis("Horizontal") < 0)
@@ -78,7 +81,7 @@ public class Controller2DAnimated : MonoBehaviour {
             currentTime = currentTime + 1;
 
             //adds current location to rewinding dictionary
-            rewindDict[currentTime] = new Vector3[] { transform.position, rb.velocity, passOnWall };
+            rewindDict[currentTime] = new Vector3[] { transform.position, rb.velocity, passOnWall, directionFacing };
 
             // wall stuff
             if (onWall)
@@ -205,6 +208,17 @@ public class Controller2DAnimated : MonoBehaviour {
             animator.SetBool("Climbing", false);
             climbing.OffClimbable(bc);
             climbing = new Climable();
+        }
+    }
+
+    private void writeDownDirection()
+    {
+        if (Input.GetAxis("Horizontal") != 0)
+        {
+            if (Input.GetAxis("Horizontal") > 0)
+                directionFacing = Vector2.right;
+            else
+                directionFacing = Vector2.left;
         }
     }
 }

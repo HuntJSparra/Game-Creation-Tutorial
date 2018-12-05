@@ -18,7 +18,7 @@ public class CloneScriptAnimated : MonoBehaviour
     private Rigidbody2D rb; // Rigidbody for this object
     private CapsuleCollider2D bc; // box collider 
     private float acceptableDifferenceInPosition = .5f; //this is how far it is ok to be away from the actual position of where the 
-    private bool onWall;                                //clone is now vs where the player was at that time
+    //private bool onWall;                                //clone is now vs where the player was at that time
     private Climable climb;                             // Use this for initialization
 
 
@@ -26,7 +26,7 @@ public class CloneScriptAnimated : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<CapsuleCollider2D>();
-        onWall = false;
+        //onWall = false;
         climb = new Climable();
     }
 
@@ -81,7 +81,7 @@ public class CloneScriptAnimated : MonoBehaviour
     public void goingBackwards()
     {
         Vector3 rewindingPos = rewindDict[currentTime][0];
-        Vector2 rewindingVelo = rewindDict[currentTime][1];
+        //Vector2 rewindingVelo = rewindDict[currentTime][1];
         //print("Rewinding to this place " + rewindingPos);
         GetComponent<SpriteRenderer>().enabled = true;
         transform.position = rewindingPos;
@@ -113,9 +113,9 @@ public class CloneScriptAnimated : MonoBehaviour
     public void paradoxBySeeing()
     {
         LayerMask mask = LayerMask.GetMask("Player");
-
         //print("Clone is facing" + rewindDict[currentTime][2]);
-        RaycastHit2D hit = Physics2D.Raycast(rb.position, rewindDict[currentTime][2], 500.0f, mask);
+        //print(rewindDict[currentTime][2]);
+        RaycastHit2D hit = Physics2D.Raycast(rb.position, rewindDict[currentTime][3], 500.0f, mask);
         Collider2D playerCollider = hit.collider;
         if (playerCollider != null)
         {

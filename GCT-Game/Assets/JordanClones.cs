@@ -80,7 +80,7 @@ public class JordanClones : MonoBehaviour
     public void goingBackwards()
     {
         Vector3 rewindingPos = rewindDict[currentTime][0];
-        Vector2 rewindingVelo = rewindDict[currentTime][1];
+        //Vector2 rewindingVelo = rewindDict[currentTime][1];
         //print("Rewinding to this place " + rewindingPos);
         GetComponent<SpriteRenderer>().enabled = true;
         transform.position = rewindingPos;
