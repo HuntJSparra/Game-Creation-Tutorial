@@ -32,10 +32,11 @@ public class ControllerJordan : MonoBehaviour
         climbing = new Climable();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (Input.GetKey("e")) // if rewinding
         {
+            rb.bodyType = RigidbodyType2D.Static;
             // setting up a clone
             if (rewindingStartedLastFrame)
                 createClone();
@@ -49,6 +50,10 @@ public class ControllerJordan : MonoBehaviour
         }
         else // playable
         {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.velocity = new Vector2(Input.GetAxis("Horizontal") * velMod, rb.velocity.y);
+            climb();
+            jump();
             // The current time 
             currentTime = currentTime + 1;
 
@@ -77,22 +82,6 @@ public class ControllerJordan : MonoBehaviour
 
             // used for initializing clones
             rewindingStartedLastFrame = true;
-        }
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if (Input.GetKey("e")) // hold down e to rewind
-        {
-            rb.bodyType = RigidbodyType2D.Static;
-        }
-        else
-        {
-            rb.bodyType = RigidbodyType2D.Dynamic;
-            rb.velocity = new Vector2(Input.GetAxis("Horizontal") * velMod, rb.velocity.y);
-            climb();
-            jump();
         }
     }
 

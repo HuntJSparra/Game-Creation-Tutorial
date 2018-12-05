@@ -30,7 +30,7 @@ public class JordanClones : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         currentTime = player.GetComponent<ControllerJordan>().getTime();
         if (Input.GetKey("e")) // hold down e to rewind

@@ -17,7 +17,7 @@ public class Climable : MonoBehaviour {
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Player" || other.tag == "Clone")
+        if(other.tag == "Player")
         {
             entered = true;
             numClimbers++;
@@ -26,7 +26,7 @@ public class Climable : MonoBehaviour {
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == "Player" || other.tag == "Clone")
+        if (other.tag == "Player")
         {
             numClimbers--;
             if(numClimbers == 0)
@@ -46,9 +46,6 @@ public class Climable : MonoBehaviour {
 
     public void OffClimbable(Collider2D other)
     {
-        if (entered)
-        {
-            other.gameObject.GetComponent<Rigidbody2D>().gravityScale = 1.5F;
-        }
+        other.gameObject.GetComponent<Rigidbody2D>().gravityScale = 1.5F;
     }
 }

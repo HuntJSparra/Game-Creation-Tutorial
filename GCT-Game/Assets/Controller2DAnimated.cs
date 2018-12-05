@@ -39,12 +39,16 @@ public class Controller2DAnimated : MonoBehaviour {
         climbing = new Climable();
     }
     
-    private void Update()
+    private void FixedUpdate()
     {
         if (Input.GetKey("e")) // if rewinding
         {
+            rb.bodyType = RigidbodyType2D.Static;
+
+            // Animation-related
+            animator.SetBool("Running", false);
             // setting up a clone
-            if(rewindingStartedLastFrame)
+            if (rewindingStartedLastFrame)
                 createClone();
 
             // Sets the current time back and sets spawn frame to the right value;
@@ -56,47 +60,7 @@ public class Controller2DAnimated : MonoBehaviour {
         }
         else // playable
         {
-            // The current time 
-            currentTime = currentTime + 1;
-
-            // adds current location to rewinding dictionary
-            rewindDict[currentTime] = new Vector3[] { transform.position, rb.velocity };
-
-            // turns the players movement back on if they just stopped rewinding, in use so the character stops while rewinding
-            if(rewindingStartedLastFrame == false)
-            {
-                rb.bodyType = RigidbodyType2D.Dynamic;
-            }
-
-            // used for initializing clones
-            rewindingStartedLastFrame = true;
-
-            // wall stuff
-            if (onWall)
-            {
-                passOnWall = Vector3.one;
-            }
-            else
-            {
-                passOnWall = Vector3.zero;
-            }
-
-            jump();
-            climb();
-        }
-    }
-
-    // Update is called once per frame
-    void FixedUpdate () {
-        if (Input.GetKey("e")) // hold down e to rewind
-        {
-            rb.bodyType = RigidbodyType2D.Static;
-
-            // Animation-related
-            animator.SetBool("Running", false);
-        }
-        else
-        {
+            // The current time
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.velocity = new Vector2(Input.GetAxis("Horizontal") * velMod, rb.velocity.y);
 
@@ -111,6 +75,32 @@ public class Controller2DAnimated : MonoBehaviour {
                 sr.flipX = false;
             else if (Input.GetAxis("Horizontal") < 0)
                 sr.flipX = true;
+            currentTime = currentTime + 1;
+
+            //adds current location to rewinding dictionary
+            rewindDict[currentTime] = new Vector3[] { transform.position, rb.velocity, passOnWall };
+
+            // wall stuff
+            if (onWall)
+            {
+                passOnWall = Vector3.one;
+            }
+            else
+            {
+                passOnWall = Vector3.zero;
+            }
+
+            // turns the players movement back on if they just stopped rewinding, in use so the character stops while rewinding
+            if(rewindingStartedLastFrame == false)
+            {
+                rb.bodyType = RigidbodyType2D.Dynamic;
+            }
+
+            // used for initializing clones
+            rewindingStartedLastFrame = true;
+
+            jump();
+            climb();
         }
     }
 

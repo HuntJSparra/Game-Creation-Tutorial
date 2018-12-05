@@ -18,16 +18,20 @@ public class CloneScriptAnimated : MonoBehaviour
     private Rigidbody2D rb; // Rigidbody for this object
     private CapsuleCollider2D bc; // box collider 
     private float acceptableDifferenceInPosition = .5f; //this is how far it is ok to be away from the actual position of where the 
-                                                        //clone is now vs where the player was at that time
-                                                        // Use this for initialization
+    private bool onWall;                                //clone is now vs where the player was at that time
+    private Climable climb;                             // Use this for initialization
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<CapsuleCollider2D>();
+        onWall = false;
+        climb = new Climable();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         currentTime = player.GetComponent<Controller2DAnimated>().getTime();
         if (Input.GetKey("e")) // hold down e to rewind
@@ -41,6 +45,7 @@ public class CloneScriptAnimated : MonoBehaviour
             {
                 GetComponent<SpriteRenderer>().enabled = false;
                 bc.enabled = false;
+                rb.bodyType = RigidbodyType2D.Static;
             }
         }
         else // going forward
@@ -62,6 +67,7 @@ public class CloneScriptAnimated : MonoBehaviour
             {
                 GetComponent<SpriteRenderer>().enabled = false;
                 bc.enabled = false;
+                rb.bodyType = RigidbodyType2D.Static;
             }
         }
     }
@@ -91,6 +97,15 @@ public class CloneScriptAnimated : MonoBehaviour
         //transform.SetPositionAndRotation(rewindingPos, empty);
         // turns the bounding box back on 
         bc.enabled = true;
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        if (rewindDict[currentTime][2] == Vector3.one)
+        {
+            climb.OnClimbable(bc);
+        }
+        else if (rewindDict[currentTime][2] == Vector3.zero)
+        {
+            climb.OffClimbable(bc);
+        }
         rb.velocity = rewindingVelo;
         return rewindingPos;
     }
@@ -120,6 +135,23 @@ public class CloneScriptAnimated : MonoBehaviour
             return true;
 
         return false;
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Climbable")
+        {
+            climb = collision.GetComponent<Climable>();
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Climbable")
+        {
+            climb.OffClimbable(bc);
+            climb = new Climable();
+        }
     }
 
 }
