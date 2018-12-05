@@ -121,9 +121,8 @@ public class Controller2DAnimated : MonoBehaviour {
 
     public void createClone()
     {
-        Quaternion empty = new Quaternion();
         Vector3 currentPos = transform.position;
-        GameObject clone = Instantiate(guy, currentPos, empty);
+        GameObject clone = Instantiate(guy, currentPos, Quaternion.identity);
 
         clone.GetComponent<SpriteRenderer>().enabled = true;
         // for deep copying
@@ -132,7 +131,7 @@ public class Controller2DAnimated : MonoBehaviour {
         {
             temp.Add(i, rewindDict[i]);
         }
-        clone.GetComponent<CloneScript>().updateDictionary(temp);
+        clone.GetComponent<CloneScriptAnimated>().updateDictionary(temp);
 
         rewindingStartedLastFrame = false;
     }

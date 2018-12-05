@@ -41,7 +41,7 @@ public class BasketScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update() {
         if (fallDir < 1 && fallDir > -1) {
-            fallDir += 0.01f;
+            fallDir += 0.05f;
         }
 
 		if ((fallDir < 0 && basket.segment.position.y > 0) || (fallDir > 0 && basket.segment.position.y < 3.36)) {

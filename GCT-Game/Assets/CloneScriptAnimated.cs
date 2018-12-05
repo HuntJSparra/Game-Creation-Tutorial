@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,26 +9,31 @@ using UnityEngine;
 
 
 //William
-public class CloneScriptAnimated : MonoBehaviour {
+public class CloneScriptAnimated : MonoBehaviour
+{
 
     Dictionary<int, Vector3[]> rewindDict = new Dictionary<int, Vector3[]>();
     public GameObject player;
     private int currentTime;
     private Rigidbody2D rb; // Rigidbody for this object
-    private BoxCollider2D bc; // box collider 
-    // Use this for initialization
-    void Start () {
+    private CapsuleCollider2D bc; // box collider 
+    private float acceptableDifferenceInPosition = .5f; //this is how far it is ok to be away from the actual position of where the 
+                                                        //clone is now vs where the player was at that time
+                                                        // Use this for initialization
+    void Start()
+    {
         rb = GetComponent<Rigidbody2D>();
-        bc = GetComponent<BoxCollider2D>();
+        bc = GetComponent<CapsuleCollider2D>();
     }
-    
+
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         currentTime = player.GetComponent<Controller2DAnimated>().getTime();
         if (Input.GetKey("e")) // hold down e to rewind
         {
             // setting position if this clone is in the dictionary
-            if (rewindDict.ContainsKey(currentTime)) 
+            if (rewindDict.ContainsKey(currentTime))
             {
                 goingBackwards();
             }
@@ -39,15 +45,18 @@ public class CloneScriptAnimated : MonoBehaviour {
         }
         else // going forward
         {
-            if(rewindDict.ContainsKey(currentTime)) 
+            if (rewindDict.ContainsKey(currentTime))
             {
                 Vector3 rewindingPos = goingForwards();
 
                 // paradox checking by velocity
-                if (!transform.position.Equals(rewindingPos))
+
+                if (paradoxByVelocity(rewindingPos, transform.position))
                 {
-                    print("Paradox");
+                    print("Paradox by Velocity");
                 }
+
+                paradoxBySeeing();
             }
             else // this clone isn't in the game at this time so disappear 
             {
@@ -56,11 +65,10 @@ public class CloneScriptAnimated : MonoBehaviour {
             }
         }
     }
-    
+
     public void updateDictionary(Dictionary<int, Vector3[]> temp)
     {
         rewindDict = temp;
-        print("Got a new dictionary");
         currentTime = player.GetComponent<Controller2DAnimated>().getTime();
     }
 
@@ -86,4 +94,32 @@ public class CloneScriptAnimated : MonoBehaviour {
         rb.velocity = rewindingVelo;
         return rewindingPos;
     }
+
+    public void paradoxBySeeing()
+    {
+        LayerMask mask = LayerMask.GetMask("Player");
+
+        //print("Clone is facing" + rewindDict[currentTime][2]);
+        RaycastHit2D hit = Physics2D.Raycast(rb.position, rewindDict[currentTime][2], 500.0f, mask);
+        Collider2D playerCollider = hit.collider;
+        if (playerCollider != null)
+        {
+            //print("Is playerCollider on?" + playerCollider.enabled);
+            if (playerCollider.enabled == true)
+            {
+                print("Paradox where a clone saw you");
+            }
+        }
+    }
+
+    public bool paradoxByVelocity(Vector2 positionInDictionary, Vector2 currentPosition)
+    {
+        if (Math.Abs(positionInDictionary.x - currentPosition.x) >= acceptableDifferenceInPosition)
+            return true;
+        if (Math.Abs(positionInDictionary.y - currentPosition.y) >= acceptableDifferenceInPosition)
+            return true;
+
+        return false;
+    }
+
 }
