@@ -23,6 +23,7 @@ public class BasketScript : MonoBehaviour {
 
     private Transform lastSegment;
     public Transform gate;
+    public Transform gateRope;
 
 	// Use this for initialization
 	void Start() {
@@ -59,6 +60,8 @@ public class BasketScript : MonoBehaviour {
         }
 
         gate.transform.position = gateSegment.originalPosition + (basket.originalPosition - basket.segment.position);
+        gateRope.transform.position = new Vector3(gateRope.transform.position.x, 1.48f-0.65f*(basket.segment.transform.position.y - basket.originalPosition.y) / (basket.originalPosition.y - 1.62f), gateRope.transform.position.z);
+        gateRope.transform.localScale = new Vector3(gateRope.transform.localScale.x, 2.5f+1.1f*(basket.segment.transform.position.y-basket.originalPosition.y)/(basket.originalPosition.y-1.62f), gateRope.transform.localScale.z);
 	}
 
     void OnCollisionEnter2D(Collision2D col) {
