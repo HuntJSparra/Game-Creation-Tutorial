@@ -9,7 +9,8 @@ public class Controller2DAnimated : MonoBehaviour {
     private Rigidbody2D rb; // Rigidbody for this object
     private const float velMod = 5; // how fast we scale movement left and right
     private const float jumpForce = 300; // how much of a force we're applying upwards when we jump
-    private Dictionary<int, Vector3[]> rewindDict = new Dictionary<int, Vector3[]>(); // The array at [0] is position and at [1] is velocity
+    private Dictionary<int, Vector3[]> rewindDict = new Dictionary<int, Vector3[]>(); // The array at [0] is position and at [1] is velocity 
+    //[2] is for climbing walls [3] is for writing down the direction the player is facing
     private bool rewindingStartedLastFrame = true; // used for instantiating clone
     private int currentTime; // current time that we are on (is subtracted while we're going back in time)
     public GameObject guy; // the starter clone
@@ -26,6 +27,11 @@ public class Controller2DAnimated : MonoBehaviour {
     // Animation-Related
     private Animator animator;
     private SpriteRenderer sr;
+
+    //Sound FX related
+    public AudioSource soundFXSource;
+    public AudioClip walkingSoundFX;
+
 
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -69,9 +75,20 @@ public class Controller2DAnimated : MonoBehaviour {
 
             // Animation-related
             if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.3)
+            {
                 animator.SetBool("Running", true);
+                if (!soundFXSource.isPlaying)
+                {
+                    soundFXSource.clip = walkingSoundFX;
+                    soundFXSource.Play();
+                }
+            }
             else
+            {
                 animator.SetBool("Running", false);
+                soundFXSource.Stop();
+            }
+            
 
             // Face the correct direction for sprite
             if (Input.GetAxis("Horizontal") > 0)
