@@ -69,6 +69,7 @@
     <Compile Include="Assets\Controller2DAnimated.cs" />
     <Compile Include="Assets\ControllerJordan.cs" />
     <Compile Include="Assets\JordanClones.cs" />
+    <Compile Include="Assets\Rewindable Object.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/billy/Game Creation (Teleportation)/Game-Creation-Tutorial/GCT-Game/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
