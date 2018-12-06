@@ -16,6 +16,7 @@ public class RewindableObject : MonoBehaviour {
 
     private void FixedUpdate()
     {
+        currentTime = player.GetComponent<Controller2DAnimated>().getTime();
         if (Input.GetKey("e")) // if rewinding
         {
             goBackwards();
@@ -44,7 +45,6 @@ public class RewindableObject : MonoBehaviour {
 
     private void writeDownLocation()
     {
-        currentTime = player.GetComponent<Controller2DAnimated>().getTime();
         //Write down location
         previousLocations[currentTime] = transform.position;
     }
