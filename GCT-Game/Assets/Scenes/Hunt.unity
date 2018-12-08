@@ -623,6 +623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76adbf9fc1a6c47c29660b14779083cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 132895049}
   sinkSpeed: 0.02
   fallDir: 1
   gate: {fileID: 1934843491}

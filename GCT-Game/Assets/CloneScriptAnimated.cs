@@ -20,6 +20,8 @@ public class CloneScriptAnimated : MonoBehaviour
     private float acceptableDifferenceInPosition = .5f; //this is how far it is ok to be away from the actual position of where the 
     //private bool onWall;                                //clone is now vs where the player was at that time
     private Climable climb;                             // Use this for initialization
+    private SpriteRenderer sr;
+    private Vector2 dir;
 
 
     void Start()
@@ -28,6 +30,7 @@ public class CloneScriptAnimated : MonoBehaviour
         bc = GetComponent<CapsuleCollider2D>();
         //onWall = false;
         climb = new Climable();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -54,6 +57,12 @@ public class CloneScriptAnimated : MonoBehaviour
             {
                 Vector3 rewindingPos = goingForwards();
 
+                //direction facing
+                dir = rewindDict[currentTime][3];
+                if (dir == Vector2.right)
+                    sr.flipX = false;
+                else if(dir == Vector2.left)
+                    sr.flipX = true;
                 // paradox checking by velocity
 
                 if (paradoxByVelocity(rewindingPos, transform.position))
