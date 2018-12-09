@@ -33,6 +33,11 @@ public class Controller2DAnimated : MonoBehaviour {
     public AudioClip walkingSoundFX;
 
 
+    //setting clones restart soundfx
+    public AudioSource cloneSounds;
+    public AudioClip restartLevel;
+
+
     void Start () {
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<Collider2D>();
@@ -102,13 +107,9 @@ public class Controller2DAnimated : MonoBehaviour {
 
             // wall stuff
             if (onWall)
-            {
                 passOnWall = Vector3.one;
-            }
             else
-            {
                 passOnWall = Vector3.zero;
-            }
 
             // turns the players movement back on if they just stopped rewinding, in use so the character stops while rewinding
             if(rewindingStartedLastFrame == false)

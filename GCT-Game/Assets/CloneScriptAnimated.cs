@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.UIElements;
+using UnityEngine.SceneManagement;
 
 
 //add code for turning off box colider
@@ -23,6 +25,9 @@ public class CloneScriptAnimated : MonoBehaviour
     private SpriteRenderer sr;
     private Vector2 dir;
 
+    //Sound FX related
+    public AudioSource soundFXSource;
+    public AudioClip restartLevel;
 
     void Start()
     {
@@ -67,6 +72,21 @@ public class CloneScriptAnimated : MonoBehaviour
 
                 if (paradoxByVelocity(rewindingPos, transform.position))
                 {
+                    if (!soundFXSource.isPlaying)
+                    {
+                        soundFXSource.clip = restartLevel;
+                        soundFXSource.Play();
+                    }
+
+                    if (!soundFXSource.isPlaying)
+                    {
+                        SceneManager.LoadScene("Hunt");
+                    }
+                    else //fade to black
+                    {
+
+                    }
+
                     print("Paradox by Velocity");
                 }
 
@@ -122,8 +142,6 @@ public class CloneScriptAnimated : MonoBehaviour
     public void paradoxBySeeing()
     {
         LayerMask mask = LayerMask.GetMask("Player");
-        //print("Clone is facing" + rewindDict[currentTime][2]);
-        //print(rewindDict[currentTime][2]);
         RaycastHit2D hit = Physics2D.Raycast(rb.position, rewindDict[currentTime][3], 500.0f, mask);
         Collider2D playerCollider = hit.collider;
         if (playerCollider != null)
@@ -131,6 +149,21 @@ public class CloneScriptAnimated : MonoBehaviour
             //print("Is playerCollider on?" + playerCollider.enabled);
             if (playerCollider.enabled == true)
             {
+                if (!soundFXSource.isPlaying)
+                {
+                    soundFXSource.clip = restartLevel;
+                    soundFXSource.Play();
+                }
+
+                if (!(soundFXSource.isPlaying))
+                {
+                    SceneManager.LoadScene("Hunt");
+                }
+                else //fade to black
+                {
+                    
+                }
+
                 print("Paradox where a clone saw you");
             }
         }

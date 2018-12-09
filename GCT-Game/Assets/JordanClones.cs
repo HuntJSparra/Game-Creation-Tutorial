@@ -18,14 +18,14 @@ public class JordanClones : MonoBehaviour
     private Rigidbody2D rb; // Rigidbody for this object
     private CapsuleCollider2D bc; // box collider 
     private float acceptableDifferenceInPosition = .5f; //this is how far it is ok to be away from the actual position of where the 
-    private bool onWall;                                //clone is now vs where the player was at that time
+    //private bool onWall;                                //clone is now vs where the player was at that time
     private Climable climb;                             // Use this for initialization
     
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<CapsuleCollider2D>();
-        onWall = false;
+        //onWall = false;
         climb = new Climable();
     }
 
