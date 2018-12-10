@@ -68,6 +68,7 @@
     <Compile Include="Assets\Controller2D.cs" />
     <Compile Include="Assets\Controller2DAnimated.cs" />
     <Compile Include="Assets\ControllerJordan.cs" />
+    <Compile Include="Assets\FadeToBlackAnimatons\FadeToBlackScript.cs" />
     <Compile Include="Assets\JordanClones.cs" />
     <Compile Include="Assets\RewindableObject.cs" />
     <Reference Include="UnityEditor.StandardEvents">

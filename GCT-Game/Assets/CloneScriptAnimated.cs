@@ -2,15 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.UIElements;
-using UnityEngine.SceneManagement;
 
 
-//add code for turning off box colider
-
-
-
-//William
 public class CloneScriptAnimated : MonoBehaviour
 {
 
@@ -25,9 +18,9 @@ public class CloneScriptAnimated : MonoBehaviour
     private SpriteRenderer sr;
     private Vector2 dir;
 
-    //Sound FX related
-    public AudioSource soundFXSource;
-    public AudioClip restartLevel;
+    public GameObject resetLevelEmpty;
+
+
 
     void Start()
     {
@@ -69,26 +62,13 @@ public class CloneScriptAnimated : MonoBehaviour
                 else if(dir == Vector2.left)
                     sr.flipX = true;
                 // paradox checking by velocity
-
                 if (paradoxByVelocity(rewindingPos, transform.position))
                 {
-                    if (!soundFXSource.isPlaying)
-                    {
-                        soundFXSource.clip = restartLevel;
-                        soundFXSource.Play();
-                    }
+                    resetLevelEmpty.GetComponent<FadeToBlackScript>().startFadeToBlack();
 
-                    if (!soundFXSource.isPlaying)
-                    {
-                        SceneManager.LoadScene("Hunt");
-                    }
-                    else //fade to black
-                    {
-
-                    }
-
-                    print("Paradox by Velocity");
+                    //print("Paradox by Velocity");
                 }
+
 
                 paradoxBySeeing();
             }
@@ -149,26 +129,11 @@ public class CloneScriptAnimated : MonoBehaviour
             //print("Is playerCollider on?" + playerCollider.enabled);
             if (playerCollider.enabled == true)
             {
-                if (!soundFXSource.isPlaying)
-                {
-                    soundFXSource.clip = restartLevel;
-                    soundFXSource.Play();
-                }
-
-                if (!(soundFXSource.isPlaying))
-                {
-                    SceneManager.LoadScene("Hunt");
-                }
-                else //fade to black
-                {
-                    
-                }
-
-                print("Paradox where a clone saw you");
+                resetLevelEmpty.GetComponent<FadeToBlackScript>().startFadeToBlack();
+                //print("Paradox where a clone saw you");
             }
         }
     }
-
     public bool paradoxByVelocity(Vector2 positionInDictionary, Vector2 currentPosition)
     {
         if (Math.Abs(positionInDictionary.x - currentPosition.x) >= acceptableDifferenceInPosition)
@@ -195,5 +160,4 @@ public class CloneScriptAnimated : MonoBehaviour
             climb = new Climable();
         }
     }
-
 }

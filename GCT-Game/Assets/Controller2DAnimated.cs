@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
 //William
 public class Controller2DAnimated : MonoBehaviour {
 
@@ -32,11 +33,7 @@ public class Controller2DAnimated : MonoBehaviour {
     public AudioSource soundFXSource;
     public AudioClip walkingSoundFX;
 
-
-    //setting clones restart soundfx
-    public AudioSource cloneSounds;
-    public AudioClip restartLevel;
-
+    
 
     void Start () {
         rb = GetComponent<Rigidbody2D>();
