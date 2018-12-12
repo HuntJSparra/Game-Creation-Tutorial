@@ -79,10 +79,13 @@ public class Controller2DAnimated : MonoBehaviour {
             if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.3)
             {
                 animator.SetBool("Running", true);
-                if (!soundFXSource.isPlaying)
+                if (!soundFXSource.isPlaying && onWall == false && animator.GetBool("Jumping") == false && animator.GetBool("Falling") == false)
                 {
                     soundFXSource.clip = walkingSoundFX;
                     soundFXSource.Play();
+                }
+                else if (onWall == true || animator.GetBool("Jumping") == true || animator.GetBool("Falling") == true) {
+                    soundFXSource.Stop();
                 }
             }
             else

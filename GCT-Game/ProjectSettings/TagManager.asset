@@ -7,6 +7,7 @@ TagManager:
   - Clone
   - Climbable
   - Wall
+  - DontDestroy
   layers:
   - Default
   - TransparentFX

@@ -33,7 +33,7 @@ public class FadeToBlackScript : MonoBehaviour {
                 blackAnimator.SetBool("FadeOut", false);
                 resetNow = false;
                 print("resetting the level");
-                SceneManager.LoadScene("Hunt");
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
             if (first)
             {
