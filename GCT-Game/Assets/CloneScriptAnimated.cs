@@ -20,6 +20,10 @@ public class CloneScriptAnimated : MonoBehaviour
 
     public GameObject resetLevelEmpty;
 
+    //soundFX
+    public AudioSource soundSourceCloneDespawn;
+    public AudioClip soundFXCloneDespawn;
+    public bool cloneDyingSoon = false; //used if the despawn sound should play
 
 
     void Start()
@@ -69,8 +73,17 @@ public class CloneScriptAnimated : MonoBehaviour
                     //print("Paradox by Velocity");
                 }
 
-
                 paradoxBySeeing();
+
+                if(!rewindDict.ContainsKey(currentTime + 104))
+                    cloneDyingSoon = true;
+
+                if (cloneDyingSoon && !soundSourceCloneDespawn.isPlaying)
+                {
+                    soundSourceCloneDespawn.clip = soundFXCloneDespawn;
+                    soundSourceCloneDespawn.Play();
+                    cloneDyingSoon = false;
+                }
             }
             else // this clone isn't in the game at this time so disappear 
             {

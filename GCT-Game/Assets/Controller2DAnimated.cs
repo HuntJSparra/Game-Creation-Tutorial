@@ -32,7 +32,11 @@ public class Controller2DAnimated : MonoBehaviour {
     //Sound FX related
     public AudioSource soundFXSource;
     public AudioClip walkingSoundFX;
-
+    public AudioClip rewindingSoundFX;
+    public AudioSource jumpedRecentlySoundSource;
+    public AudioClip jumpStartSoundFX;
+    public AudioClip jumpEndSoundFX;
+    public bool jumpedRecently = false;
     
 
     void Start () {
@@ -65,6 +69,14 @@ public class Controller2DAnimated : MonoBehaviour {
             {
                 currentTime = currentTime - 1;
                 spawnFrame = currentTime;
+            }
+
+            //plays the rewinding sound
+            //play if the current clip is not rewindingSoundFX (first time they press e)
+            if (soundFXSource.clip != rewindingSoundFX)
+            {
+                soundFXSource.clip = rewindingSoundFX;
+                soundFXSource.Play();
             }
         }
         else // playable
@@ -156,28 +168,65 @@ public class Controller2DAnimated : MonoBehaviour {
         if (Physics2D.Raycast(rb.position, Vector2.down, 1.0f, mask))
         {
             animator.SetBool("Falling", false);
+            //SoundFX landing sound
+            /*
+            if (jumpedRecently)
+            {
+                jumpedRecentlySoundSource.clip = jumpEndSoundFX;
+                jumpedRecentlySoundSource.Play();
+                jumpedRecently = false;
+            }
+            */
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 animator.SetBool("Jumping", true);
                 rb.AddForce(jump);
+                /*
+                jumpedRecently = true;
+                if (jumpedRecentlySoundSource.clip != jumpStartSoundFX)
+                {
+                    jumpedRecentlySoundSource.clip = jumpStartSoundFX;
+                    jumpedRecentlySoundSource.Play();
+                    print("Played jump start");
+                }
+                */
             }
         }
         else if (Physics2D.Raycast(rb.position, Vector2.down, 1.0f, climbable) & onWall)
         {
             animator.SetBool("Falling", false);
+            //SoundFX landing sound
+            /*
+            if (jumpedRecently)
+            {
+                jumpedRecentlySoundSource.clip = jumpEndSoundFX;
+                jumpedRecentlySoundSource.Play();
+                jumpedRecently = false;
+            }
+            */
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 animator.SetBool("Jumping", true);
                 onWall = false;
                 climbing.OffClimbable(bc);
                 rb.AddForce(jump);
+                /*
+                jumpedRecently = true;
+                if (jumpedRecentlySoundSource.clip != jumpStartSoundFX)
+                {
+                    jumpedRecentlySoundSource.clip = jumpStartSoundFX;
+                    jumpedRecentlySoundSource.Play();
+                    print("Played jump start");
+                    
+                }
+                */
             }
         }
         else
         {
             animator.SetBool("Jumping", false);
-                animator.SetBool("Falling", true); 
-            }
+            animator.SetBool("Falling", true); 
+        }
     }
 
     public void climb()

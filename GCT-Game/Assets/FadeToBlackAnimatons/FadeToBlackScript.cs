@@ -13,6 +13,8 @@ public class FadeToBlackScript : MonoBehaviour {
     public Animator blackAnimator;
     public Image blackImage;
 
+    public AudioSource cloneSoundSource;
+
     // Update is called once per frame
     void Update () {
         fadeToBlack();
@@ -39,6 +41,7 @@ public class FadeToBlackScript : MonoBehaviour {
             {
                 GameRestartFX.clip = restartLevel;
                 GameRestartFX.Play();
+                cloneSoundSource.Stop();
                 print("Turning on FadeOut");
                 blackAnimator.SetBool("FadeOut", true);
                 first = false;
